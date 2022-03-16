@@ -1,10 +1,13 @@
 const asyncHandler = require("express-async-handler");
+const Expense = require("../model/expenseModel");
 
 // @desc    Get expense
 // @route   GET /api/expense
 // @access  Private
 const getExpense = asyncHandler(async (req, res) => {
-  res.status(200).json({ message: "test" });
+  const expense = Expense.find({ user: req.user.id });
+
+  res.status(200).json(expense);
 });
 
 // @desc    update expense
