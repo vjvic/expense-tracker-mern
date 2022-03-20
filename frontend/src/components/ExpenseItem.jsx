@@ -10,11 +10,13 @@ const ExpenseItem = ({ item }) => {
   return (
     <Box as="li" display="flex" justifyContent="space-between" my="2">
       <div>
-        <Text fontSize="xl" textTransform="capitalize">
+        <Text fontSize="lg" textTransform="capitalize">
           {item.name}
         </Text>
         <Text fontSize="sm" color="gray.500">
-          <span>&#8369;{item.amount}</span>
+          <Text as="span" color={item.type === "income" ? "green" : "red"}>
+            &#8369;{item.amount}
+          </Text>
           {" - "}
           <span>{new Date(item.createdAt).toLocaleString("en-US")}</span>
         </Text>
