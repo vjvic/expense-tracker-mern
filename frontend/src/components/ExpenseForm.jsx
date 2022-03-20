@@ -17,9 +17,9 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Select,
-  /*  useToast, */
+  useToast,
 } from "@chakra-ui/react";
-import { useDispatch /* useSelector  */ } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createExpense /* reset */ } from "../features/expense/expenseSlice";
 
 const incomeOptions = [
@@ -66,7 +66,7 @@ const expenseOptions = [
 
 const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
   const dispatch = useDispatch();
-  /*  const toast = useToast(); */
+  const toast = useToast();
 
   const format = (val) => `₱` + val;
   // eslint-disable-next-line
@@ -81,22 +81,38 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
 
   const { name, amount, category, type } = formData;
 
-  /* const { isSuccess } = useSelector((state) => state.expense); */
+  const { isSuccess, isError, message } = useSelector((state) => state.expense);
 
   const handleSubmit = () => {
-    if (name && amount && category) {
-      console.log({ name, amount: Number(amount), category });
+    if (!name || !amount || !category) {
+      toast({
+        title: "Error",
+        description: "Please add a text fields",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    } else {
       dispatch(createExpense({ name, amount: Number(amount), category }));
 
-      /*  if (isSuccess) {
+      if (isError) {
         toast({
-          title: "Expense created.",
+          title: "Error",
+          description: message,
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+        });
+      } else if (isSuccess) {
+        onClose();
+        toast({
+          title: "Success",
           description: "Expense successfuly created",
           status: "success",
           duration: 6000,
           isClosable: true,
         });
-      } */
+      }
     }
   };
 
