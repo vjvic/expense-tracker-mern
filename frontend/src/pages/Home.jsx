@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Container,
   Box,
@@ -13,66 +13,23 @@ import {
 import { PieChart, ExpenseForm } from "../components";
 import { FaTrash } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa";
-
-const expenseList = [
-  {
-    id: 1,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 2,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 3,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 4,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 5,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 6,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 7,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 8,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-  {
-    id: 9,
-    name: "test",
-    amount: 1000,
-    date: "2022-03-12",
-  },
-];
+import { useDispatch, useSelector } from "react-redux";
+import { getAllExpense, reset } from "../features/expense/expenseSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const { expense } = useSelector((state) => state.expense);
+
+  useEffect(() => {
+    dispatch(getAllExpense());
+
+    return () => {
+      dispatch(reset());
+    };
+  }, [dispatch]);
 
   return (
     <Box
@@ -117,9 +74,9 @@ const Home = () => {
           </Box>
           <Box h="200px" overflowY="auto">
             <ul>
-              {expenseList.map((expense) => (
+              {expense.map((expense) => (
                 <Box
-                  as="ul"
+                  as="li"
                   display="flex"
                   justifyContent="space-between"
                   my="2"
@@ -132,7 +89,9 @@ const Home = () => {
                     <Text fontSize="sm" color="gray.500">
                       <span>&#8369;{expense.amount}</span>
                       {" - "}
-                      <span>{expense.date}</span>
+                      <span>
+                        {new Date(expense.createdAt).toLocaleString("en-US")}
+                      </span>
                     </Text>
                   </div>
                   <div>

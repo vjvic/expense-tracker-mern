@@ -12,11 +12,13 @@ import {
 import { BsChevronDown } from "react-icons/bs";
 import { useLocation } from "react-router-dom";
 import { logout } from "../features/auth/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const location = useLocation();
   const dispatch = useDispatch();
+
+  const { user } = useSelector((state) => state.auth);
 
   const path = location.pathname;
 
@@ -37,7 +39,7 @@ const Header = () => {
 
         <Menu>
           <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-            Victor
+            {user && user.name}
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => dispatch(logout())}>Logout</MenuItem>

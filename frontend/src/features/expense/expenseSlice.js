@@ -2,14 +2,14 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  goals: [],
+  expense: [],
   isError: false,
   isSuccess: false,
   isLoading: false,
   message: "",
 };
 
-const API_URL = "http://localhost:5000/api/expense/";
+const API_URL = "/api/expense/";
 
 // Create new expense
 export const createExpense = createAsyncThunk(
@@ -41,7 +41,7 @@ export const createExpense = createAsyncThunk(
 // Get all expense
 export const getAllExpense = createAsyncThunk(
   "expense/getAll",
-  async (expense, thunkAPI) => {
+  async (_, thunkAPI) => {
     try {
       const token = thunkAPI.getState().auth.user.token;
       const config = {
@@ -50,7 +50,7 @@ export const getAllExpense = createAsyncThunk(
         },
       };
 
-      const response = await axios.get(API_URL, expense, config);
+      const response = await axios.get(API_URL, config);
 
       return response.data;
     } catch (error) {
@@ -107,13 +107,13 @@ export const expenseSlice = createSlice({
       .addCase(createExpense.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user.push(action.payload);
+        state.expense.push(action.payload);
       })
       .addCase(createExpense.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
+        state.expense = null;
       })
       .addCase(getAllExpense.pending, (state) => {
         state.isLoading = true;
