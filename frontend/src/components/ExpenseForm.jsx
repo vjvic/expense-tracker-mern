@@ -84,7 +84,7 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
   const { isSuccess, isError, message } = useSelector((state) => state.expense);
 
   const handleSubmit = () => {
-    if (!name || !amount || !category) {
+    if (!name || !amount || !category || !type) {
       toast({
         title: "Error",
         description: "Please add a text fields",
@@ -93,7 +93,7 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
         isClosable: true,
       });
     } else {
-      dispatch(createExpense({ name, amount: Number(amount), category }));
+      dispatch(createExpense({ name, amount: Number(amount), category, type }));
 
       if (isError) {
         toast({

@@ -74,9 +74,9 @@ const deleteExpense = asyncHandler(async (req, res) => {
 // @route   POST /api/expense
 // @access  Private
 const createExpense = asyncHandler(async (req, res) => {
-  const { name, amount, category } = req.body;
+  const { name, amount, category, type } = req.body;
 
-  if (!name && !amount && !category) {
+  if (!name && !amount && !category && !type) {
     res.status(400);
     throw new Error("Please add a text field");
   }
@@ -86,6 +86,7 @@ const createExpense = asyncHandler(async (req, res) => {
     amount,
     category,
     user: req.user.id,
+    type,
   });
 
   res.status(200).json(expense);
