@@ -9,6 +9,8 @@ import {
   useDisclosure,
   useColorModeValue,
   Spinner,
+  VStack,
+  StackDivider,
 } from "@chakra-ui/react";
 import { PieChart, ExpenseForm, ExpenseItem } from "../components";
 import { FaPlus } from "react-icons/fa";
@@ -89,7 +91,11 @@ const Home = () => {
             </Button>
           </Box>
           <Box h="200px" overflowY="auto">
-            <ul>
+            <VStack
+              divider={<StackDivider borderColor="gray.200" />}
+              align="stretch"
+              as="ul"
+            >
               {expense.length <= 0 ? (
                 <Text textAlign={"center"}>No expense item</Text>
               ) : (
@@ -97,7 +103,7 @@ const Home = () => {
                   <ExpenseItem key={item._id} item={item} />
                 ))
               )}
-            </ul>
+            </VStack>
           </Box>
         </Box>
       </Container>
