@@ -26,6 +26,14 @@ const Home = () => {
 
   const backround = useColorModeValue("gray.50", "gray.800");
 
+  //Sort expense by descending order
+  const sortExpense = (expense) => {
+    const expenseForSort = [...expense];
+    return expenseForSort.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+  };
+
   useEffect(() => {
     dispatch(getAllExpense());
 
@@ -99,7 +107,7 @@ const Home = () => {
               {expense.length <= 0 ? (
                 <Text textAlign={"center"}>No expense item</Text>
               ) : (
-                expense.map((item) => (
+                sortExpense(expense).map((item) => (
                   <ExpenseItem key={item._id} item={item} />
                 ))
               )}
