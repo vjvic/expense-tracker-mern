@@ -5,7 +5,7 @@ import { Box, Text } from "@chakra-ui/react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ text }) => {
+const PieChart = ({ text, totalAmount }) => {
   const data = {
     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
     datasets: [
@@ -46,7 +46,7 @@ const PieChart = ({ text }) => {
           {text}
         </Text>
         <Text fontSize="1xl" color={text === "Expense" ? "red" : "green"}>
-          &#8369;1000
+          &#8369;{totalAmount}
         </Text>
       </Box>
       <Box maxW="300px" m="auto">

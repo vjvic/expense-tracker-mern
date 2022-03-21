@@ -26,13 +26,27 @@ const Home = () => {
 
   const backround = useColorModeValue("gray.50", "gray.800");
 
-  //Sort expense by descending order
+  //Sort expense by date
   const sortExpense = (expense) => {
     const expenseForSort = [...expense];
     return expenseForSort.sort(
       (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
     );
   };
+
+  //Get the total income
+  const totalIncome = expense
+    .filter((item) => item.type === "income")
+    .reduce((acc, item) => acc + item.amount, 0);
+
+  //Get the total Expense
+  const totalExpense = expense
+    .filter((item) => item.type === "expense")
+    .reduce((acc, item) => acc + item.amount, 0);
+
+  //Get the total balance
+
+  const totalBalance = totalIncome - totalExpense;
 
   useEffect(() => {
     dispatch(getAllExpense());
@@ -67,11 +81,11 @@ const Home = () => {
       <Container maxW="container.lg" py={"60px"}>
         <Grid templateColumns="repeat(2, 1fr)" gap="6" mb="40px">
           <GridItem>
-            <PieChart text={"Income"} />
+            <PieChart text={"Income"} totalAmount={totalIncome} />
           </GridItem>
 
           <GridItem>
-            <PieChart text={"Expense"} />
+            <PieChart text={"Expense"} totalAmount={totalExpense} />
           </GridItem>
         </Grid>
 
@@ -89,8 +103,8 @@ const Home = () => {
           >
             <Text fontSize="xl" fontWeight="bold">
               Total Balance{" "}
-              <Box as="span" color="green">
-                &#8369;1000
+              <Box as="span" color={totalBalance <= 0 ? "red" : "green"}>
+                &#8369;{totalBalance}
               </Box>
             </Text>
 
