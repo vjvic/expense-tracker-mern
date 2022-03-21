@@ -5,29 +5,14 @@ import { Box, Text } from "@chakra-ui/react";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const PieChart = ({ text, totalAmount }) => {
+const PieChart = ({ text, totalAmount, bgColor, label, data: chartData }) => {
   const data = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+    labels: label,
     datasets: [
       {
-        label: "# of Votes",
-        data: [12, 19, 3, 5, 2, 3],
-        backgroundColor: [
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(54, 162, 235, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(153, 102, 255, 0.2)",
-          "rgba(255, 159, 64, 0.2)",
-        ],
-        borderColor: [
-          "rgba(255, 99, 132, 1)",
-          "rgba(54, 162, 235, 1)",
-          "rgba(255, 206, 86, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
-          "rgba(255, 159, 64, 1)",
-        ],
+        label: text,
+        data: chartData,
+        backgroundColor: bgColor,
         borderWidth: 1,
       },
     ],
@@ -46,7 +31,7 @@ const PieChart = ({ text, totalAmount }) => {
           {text}
         </Text>
         <Text fontSize="1xl" color={text === "Expense" ? "red" : "green"}>
-          &#8369;{totalAmount}
+          &#8369;{totalAmount.toFixed(2)}
         </Text>
       </Box>
       <Box maxW="300px" m="auto">

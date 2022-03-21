@@ -15,7 +15,7 @@ const ExpenseItem = ({ item }) => {
         </Text>
         <Text fontSize="sm" color="gray.500">
           <Text as="span" color={item.type === "income" ? "green" : "red"}>
-            &#8369;{item.amount}
+            &#8369;{item.amount.toFixed(2)}
           </Text>
           {" - "}
           <span>{new Date(item.createdAt).toLocaleString("en-US")}</span>

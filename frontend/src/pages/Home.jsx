@@ -34,6 +34,13 @@ const Home = () => {
     );
   };
 
+  //Return the total for each category
+  const filterCategory = (expense, type, category) => {
+    return expense
+      .filter((item) => item.type === type)
+      .filter((item) => item.category === category).length;
+  };
+
   //Get the total income
   const totalIncome = expense
     .filter((item) => item.type === "income")
@@ -47,6 +54,36 @@ const Home = () => {
   //Get the total balance
 
   const totalBalance = totalIncome - totalExpense;
+
+  //Income background color
+  const incomeBgColor = ["#069C24", "#045C15", "#09DB33", "#09E836", "#08C22D"];
+  //Income label
+  const incomeLabel = [
+    "Business",
+    "Investment",
+    "Deposits",
+    "Salary",
+    "Savings",
+  ];
+  //Income data
+  const incomeData = incomeLabel.map((label) =>
+    filterCategory(expense, "income", label)
+  );
+
+  //Expense background color
+  const expenseBgColor = [
+    "#9C3930",
+    "#5C221C",
+    "#DB5144",
+    "#E85548",
+    "#C2473C",
+  ];
+  //Expense label
+  const expenseLabel = ["Bills", "Travels", "Grocery", "Rent"];
+  //Income data
+  const expenseData = expenseLabel.map((label) =>
+    filterCategory(expense, "expense", label)
+  );
 
   useEffect(() => {
     dispatch(getAllExpense());
@@ -81,11 +118,23 @@ const Home = () => {
       <Container maxW="container.lg" py={"60px"}>
         <Grid templateColumns="repeat(2, 1fr)" gap="6" mb="40px">
           <GridItem>
-            <PieChart text={"Income"} totalAmount={totalIncome} />
+            <PieChart
+              text={"Income"}
+              totalAmount={totalIncome}
+              bgColor={incomeBgColor}
+              label={incomeLabel}
+              data={incomeData}
+            />
           </GridItem>
 
           <GridItem>
-            <PieChart text={"Expense"} totalAmount={totalExpense} />
+            <PieChart
+              text={"Expense"}
+              totalAmount={totalExpense}
+              bgColor={expenseBgColor}
+              label={expenseLabel}
+              data={expenseData}
+            />
           </GridItem>
         </Grid>
 
@@ -104,7 +153,7 @@ const Home = () => {
             <Text fontSize="xl" fontWeight="bold">
               Total Balance{" "}
               <Box as="span" color={totalBalance <= 0 ? "red" : "green"}>
-                &#8369;{totalBalance}
+                &#8369;{totalBalance.toFixed(2)}
               </Box>
             </Text>
 
@@ -112,7 +161,7 @@ const Home = () => {
               Add Expense
             </Button>
           </Box>
-          <Box h="200px" overflowY="auto">
+          <Box h="250px" overflowY="auto">
             <VStack
               divider={<StackDivider borderColor="gray.200" />}
               align="stretch"
