@@ -1,4 +1,4 @@
-import React, { useState /* , useEffect */ } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Modal,
@@ -20,7 +20,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
-import { createExpense /* reset */ } from "../features/expense/expenseSlice";
+import {
+  createExpense,
+  editExpense,
+  closeEdit,
+} from "../features/expense/expenseSlice";
 
 const incomeOptions = [
   {
@@ -81,9 +85,12 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
 
   const { name, amount, category, type } = formData;
 
-  const { isSuccess, isError, message } = useSelector((state) => state.expense);
+  const { isSuccess, isError, isEdit, expense, message } = useSelector(
+    (state) => state.expense
+  );
 
-  const handleSubmit = () => {
+  //Create expense
+  const handleAddExpense = () => {
     if (!name || !amount || !category || !type) {
       toast({
         title: "Error",
@@ -116,6 +123,55 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
     }
   };
 
+  //Edit expense
+  const handleEditExpense = () => {
+    if (!name || !amount || !category || !type) {
+      toast({
+        title: "Error",
+        description: "Please add a text fields",
+        status: "error",
+        duration: 6000,
+        isClosable: true,
+      });
+    } else {
+      dispatch(
+        editExpense({
+          _id: expense._id,
+          name,
+          amount: Number(amount),
+          category,
+          type,
+        })
+      );
+
+      if (isError) {
+        toast({
+          title: "Error",
+          description: message,
+          status: "error",
+          duration: 6000,
+          isClosable: true,
+        });
+      } else if (isSuccess) {
+        dispatch(closeEdit());
+        onClose();
+        toast({
+          title: "Success",
+          description: "Edit success",
+          status: "success",
+          duration: 6000,
+          isClosable: true,
+        });
+      }
+    }
+  };
+
+  //Close modal and edit
+  const closeForm = () => {
+    dispatch(closeEdit());
+    onClose();
+  };
+
   const onChange = (e) => {
     setFormData((prevState) => ({
       ...prevState,
@@ -130,29 +186,31 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
       ? expenseOptions
       : "";
 
-  /*    useEffect(() => {
-    if (isSuccess) {
-      toast({
-        title: "Expense created.",
-        description: "Expense successfuly created",
-        status: "success",
-        duration: 6000,
-        isClosable: true,
+  useEffect(() => {
+    if (isEdit && expense) {
+      setFormData({
+        name: expense.name,
+        amount: expense.amount.toFixed(2),
+        category: expense.category,
+        type: expense.type,
       });
-      dispatch(reset());
     }
-  }, [isSuccess, toast, dispatch]); */
+
+    if (!isEdit) {
+      setFormData({ name: "", amount: "0.00", category: "", type: "" });
+    }
+  }, [isEdit, dispatch, expense]);
 
   return (
     <Modal
       initialFocusRef={initialRef}
       finalFocusRef={finalRef}
       isOpen={isOpen}
-      onClose={onClose}
+      onClose={closeForm}
     >
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Add Expense</ModalHeader>
+        <ModalHeader>{isEdit ? "Edit" : "Add"} Expense</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl>
@@ -221,9 +279,15 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
-            Add
-          </Button>
+          {isEdit ? (
+            <Button colorScheme="blue" mr={3} onClick={handleEditExpense}>
+              Update
+            </Button>
+          ) : (
+            <Button colorScheme="blue" mr={3} onClick={handleAddExpense}>
+              Add
+            </Button>
+          )}
           <Button onClick={onClose}>Cancel</Button>
         </ModalFooter>
       </ModalContent>

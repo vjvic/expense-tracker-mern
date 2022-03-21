@@ -10,6 +10,32 @@ const getExpense = asyncHandler(async (req, res) => {
   res.status(200).json(expense);
 });
 
+// @desc    Get expense by id
+// @route   GET /api/expnse/:id
+// @access  Private
+const getExpenseById = asyncHandler(async (req, res) => {
+  const expense = await Expense.findById(req.params.id);
+
+  //Check for expense
+  if (!expense) {
+    res.status(400);
+    throw new Error("Expense not found");
+  }
+
+  //Check for user
+  if (!req.user) {
+    res.status(400);
+    throw new Error("User not found");
+  }
+
+  if (expense.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+
+  res.status(200).json(expense);
+});
+
 // @desc    update expense
 // @route   PUT /api/expense
 // @access  Private
@@ -97,4 +123,5 @@ module.exports = {
   updateExpense,
   deleteExpense,
   createExpense,
+  getExpenseById,
 };

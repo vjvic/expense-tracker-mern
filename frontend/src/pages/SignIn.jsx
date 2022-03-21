@@ -13,8 +13,6 @@ import {
   Link,
   Alert,
   AlertIcon,
-  AlertTitle,
-  AlertDescription,
 } from "@chakra-ui/react";
 import { Link as routerLink, useNavigate } from "react-router-dom";
 import { login, reset } from "../features/auth/authSlice";

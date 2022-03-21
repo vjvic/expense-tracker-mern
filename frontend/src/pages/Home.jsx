@@ -22,7 +22,7 @@ const Home = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { expense, isLoading } = useSelector((state) => state.expense);
+  const { expenseList, isLoading } = useSelector((state) => state.expense);
 
   const backround = useColorModeValue("gray.50", "gray.800");
 
@@ -42,12 +42,12 @@ const Home = () => {
   };
 
   //Get the total income
-  const totalIncome = expense
+  const totalIncome = expenseList
     .filter((item) => item.type === "income")
     .reduce((acc, item) => acc + item.amount, 0);
 
   //Get the total Expense
-  const totalExpense = expense
+  const totalExpense = expenseList
     .filter((item) => item.type === "expense")
     .reduce((acc, item) => acc + item.amount, 0);
 
@@ -67,7 +67,7 @@ const Home = () => {
   ];
   //Income data
   const incomeData = incomeLabel.map((label) =>
-    filterCategory(expense, "income", label)
+    filterCategory(expenseList, "income", label)
   );
 
   //Expense background color
@@ -82,7 +82,7 @@ const Home = () => {
   const expenseLabel = ["Bills", "Travels", "Grocery", "Rent"];
   //Income data
   const expenseData = expenseLabel.map((label) =>
-    filterCategory(expense, "expense", label)
+    filterCategory(expenseList, "expense", label)
   );
 
   useEffect(() => {
@@ -167,11 +167,11 @@ const Home = () => {
               align="stretch"
               as="ul"
             >
-              {expense.length <= 0 ? (
+              {expenseList.length <= 0 ? (
                 <Text textAlign={"center"}>No expense item</Text>
               ) : (
-                sortExpense(expense).map((item) => (
-                  <ExpenseItem key={item._id} item={item} />
+                sortExpense(expenseList).map((item) => (
+                  <ExpenseItem key={item._id} item={item} open={onOpen} />
                 ))
               )}
             </VStack>
