@@ -100,15 +100,14 @@ const deleteExpense = asyncHandler(async (req, res) => {
 // @route   POST /api/expense
 // @access  Private
 const createExpense = asyncHandler(async (req, res) => {
-  const { name, amount, category, type } = req.body;
+  const { amount, category, type } = req.body;
 
-  if (!name && !amount && !category && !type) {
+  if (!amount && !category && !type) {
     res.status(400);
     throw new Error("Please add a text field");
   }
 
   const expense = await Expense.create({
-    name,
     amount,
     category,
     user: req.user.id,

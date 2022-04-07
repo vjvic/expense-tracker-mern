@@ -8,9 +8,7 @@ import {
   ModalCloseButton,
   ModalBody,
   FormControl,
-  FormLabel,
   ModalFooter,
-  Input,
   NumberInput,
   NumberInputField,
   NumberInputStepper,
@@ -77,7 +75,6 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
   const parse = (val) => val.replace(/^\₱/, "");
 
   const [formData, setFormData] = useState({
-    name: "",
     amount: "0.00",
     category: "",
     type: "",
@@ -91,7 +88,7 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
 
   //Create expense
   const handleAddExpense = () => {
-    if (!name || !amount || !category || !type) {
+    if (!amount || !category || !type) {
       toast({
         title: "Error",
         description: "Please add a text fields",
@@ -125,7 +122,7 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
 
   //Edit expense
   const handleEditExpense = () => {
-    if (!name || !amount || !category || !type) {
+    if (!amount || !category || !type) {
       toast({
         title: "Error",
         description: "Please add a text fields",
@@ -137,7 +134,7 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
       dispatch(
         editExpense({
           _id: expense._id,
-          name,
+
           amount: Number(amount),
           category,
           type,
@@ -189,7 +186,6 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
   useEffect(() => {
     if (isEdit && expense) {
       setFormData({
-        name: expense.name,
         amount: expense.amount.toFixed(2),
         category: expense.category,
         type: expense.type,
@@ -213,40 +209,6 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
         <ModalHeader>{isEdit ? "Edit" : "Add"} Expense</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
-          <FormControl>
-            <FormLabel>Expense Name</FormLabel>
-            <Input
-              ref={initialRef}
-              placeholder="Expense Name"
-              id="name"
-              name="name"
-              value={name || ""}
-              onChange={onChange}
-            />
-          </FormControl>
-
-          <FormControl mt={4}>
-            <NumberInput
-              id="amount"
-              name="amount"
-              onChange={(valueString) =>
-                setFormData((prevState) => ({
-                  ...prevState,
-                  amount: parse(valueString),
-                }))
-              }
-              value={format(amount) || "0.00"}
-              precision={2}
-              step={0.2}
-            >
-              <NumberInputField />
-              <NumberInputStepper>
-                <NumberIncrementStepper />
-                <NumberDecrementStepper />
-              </NumberInputStepper>
-            </NumberInput>
-          </FormControl>
-
           <FormControl mt={4}>
             <Select
               id="type"
@@ -275,6 +237,28 @@ const ExpenseForm = ({ initialRef, finalRef, isOpen, onClose }) => {
                   </option>
                 ))}
             </Select>
+          </FormControl>
+
+          <FormControl mt={4}>
+            <NumberInput
+              id="amount"
+              name="amount"
+              onChange={(valueString) =>
+                setFormData((prevState) => ({
+                  ...prevState,
+                  amount: parse(valueString),
+                }))
+              }
+              value={format(amount) || "0.00"}
+              precision={2}
+              step={0.2}
+            >
+              <NumberInputField />
+              <NumberInputStepper>
+                <NumberIncrementStepper />
+                <NumberDecrementStepper />
+              </NumberInputStepper>
+            </NumberInput>
           </FormControl>
         </ModalBody>
 

@@ -34,7 +34,7 @@ const ExpenseItem = ({ item, open }) => {
     <Box as="li" display="flex" justifyContent="space-between" my="2">
       <div>
         <Text fontSize="lg" textTransform="capitalize">
-          {item.name}
+          {item.category}
         </Text>
         <Text fontSize="sm" color="gray.500">
           <Text as="span" color={item.type === "income" ? "green" : "red"}>
